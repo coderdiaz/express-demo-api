@@ -35,16 +35,21 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /:id
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
+  const { title, content } = req.body;
+  const { id } = req.params;
+  await models.Post.update({ title, content });
   return res
-    .status(200)
+    .status(204)
     .json();
 });
 
 // DELETE /:id
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  await models.Post.destroy({ where: { id }});
   return res
-    .status(200)
+    .status(204)
     .json();
 });
 
