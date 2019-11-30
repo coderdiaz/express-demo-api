@@ -1,8 +1,10 @@
 const express = require('express');
 const createError = require('http-errors');
+const models = require('../models');
 
 // Importing routes
 const RootRouter = require('./routes/root');
+const PostRouter = require('./routes/post');
 
 // Defining port
 const PORT = 3000;
@@ -16,6 +18,7 @@ app.use(express.json());
 
 // Register routes
 app.use(RootRouter);
+app.use('/api/posts', PostRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -32,6 +35,8 @@ app.use((err, req, res, next) => {
 });
 
 // Mounting the app on specific port
-app.listen(PORT, () => {
-  console.log(`Express API is listening on port ${PORT}`);
+models.sequelize.sync().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Express API is listening on port ${PORT}`);
+  });
 });
